@@ -7,10 +7,15 @@ import { InfoPagina } from '../interfaces/info-pagina.interface';
 })
 export class InfoPaginaService {
   info: InfoPagina = {};
+  equipo: any[] = [];
   cargada = false;
 
   constructor(private http: HttpClient) {
-    console.log('Servicio info pagina');
+    this.cargarInfo();
+    this.cargarEquipo();
+  }
+
+  private cargarInfo() {
 
     // leer archivo json
     this.http.get('assets/data/data-pagina.json')
@@ -18,7 +23,18 @@ export class InfoPaginaService {
 
         this.cargada = true;
         this.info = resp;
-        console.log(resp);
       });
   }
+
+  private cargarEquipo() {
+    this.http.get('https://devestudio-88afc.firebaseio.com/equipo.json')
+    .subscribe((resp: any[]) => {
+
+      this.cargada = true;
+      this.equipo = resp;
+      console.log(resp);
+    });
+  }
+
+
 }
